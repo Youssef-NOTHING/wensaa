@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102f35"><title>WENSA Admin</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="admin.css"><script src="admin.js" defer></script></head>
+<body class="admin-body">
+<header class="admin-header"><a class="brand" href="index.html"><img src="assets/wensa-logo.jpeg" alt="">WENSA <span class="admin-label">ADMIN</span></a><a class="back-link" href="index.html">← View website</a></header>
+<main class="admin-main">
+  <section id="login-panel" class="login-card">
+    <p class="eyebrow">LOCAL ADMIN AREA</p><h1>Welcome back.</h1><p class="muted">Sign in to manage the WENSA store and view contact messages on this device.</p>
+    <form id="login-form"><label>Admin password<input id="admin-password" type="password" required placeholder="Enter password"></label><button class="button dark" type="submit">Sign in →</button><p id="login-error" class="error"></p></form>
+    <small class="hint">First-time demo password: <b>wensa2026</b></small>
+  </section>
+  <section id="dashboard" hidden>
+    <div class="dash-top"><div><p class="eyebrow">WENSA MANAGEMENT</p><h1>Dashboard</h1><p class="muted">Your changes are saved locally in this browser.</p></div><button id="logout" class="button outline-dark">Log out</button></div>
+    <div class="stats"><article><small>PRODUCTS</small><strong id="product-count">0</strong></article><article><small>MESSAGES</small><strong id="message-count">0</strong></article><article><small>STORAGE</small><strong>LOCAL</strong></article></div>
+    <div class="admin-grid">
+      <section class="panel"><div class="panel-heading"><div><p class="eyebrow">STORE</p><h2 id="editor-title">Add a product</h2></div></div>
+        <form id="product-form">
+          <input type="hidden" id="product-id">
+          <label>Product name<input id="product-name" required placeholder="e.g. WENSA Hope T-shirt"></label>
+          <label>Category / small label<input id="product-type" placeholder="e.g. WENSA COLLECTION"></label>
+          <label>Price<input id="product-price" placeholder="e.g. 120 MAD"></label>
+          <label>Product image URL (optional)<input id="product-image" placeholder="https://..."></label>
+          <label>Or upload product image<input id="product-upload" type="file" accept="image/*"></label>
+          <div id="image-preview-wrap" hidden><img id="image-preview" alt="Product image preview"><button type="button" id="remove-image" class="text-button danger">Remove image</button></div>
+          <label>Description<textarea id="product-description" rows="3" placeholder="Short product description"></textarea></label>
+          <label class="check-label"><input id="product-active" type="checkbox" checked> Show this product on the website</label>
+          <div class="form-actions"><button class="button dark" type="submit" id="save-product">Save product</button><button class="button outline-dark" type="button" id="cancel-edit">Clear</button></div>
+        </form>
+      </section>
+      <section class="panel"><div class="panel-heading"><div><p class="eyebrow">YOUR CATALOGUE</p><h2>Products</h2></div></div><div id="product-list" class="admin-list"></div></section>
+    </div>
+    <section class="panel messages-panel"><div class="panel-heading"><div><p class="eyebrow">INBOX</p><h2>Contact messages</h2></div><button id="clear-messages" class="text-button">Clear all</button></div><div id="message-list" class="message-list"></div></section>
+    <section class="local-warning"><b>Local demo database</b><p>Products and messages are stored in this browser's localStorage. They are not shared across devices, and clearing browser data can erase them. This demo password is not secure authentication. Do not use this setup for real customer data or public admin access.</p><button id="export-data" class="button outline-dark">Export backup (JSON) ↓</button><button id="reset-data" class="text-button danger">Reset demo data</button></section>
+  </section>
+</main>
+</body></html>
