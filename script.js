@@ -38,7 +38,7 @@ function escapeHtml(value) {
 const toggle = document.querySelector(".toggle");
 const nav = document.querySelector("nav");
 if (toggle && nav) {
-  toggle.addEventListener("click", () => nav.classList.toggle("open"));
+  // the open/close click is already handled in language-chat.js (two handlers = opens then closes immediately)
   nav.querySelectorAll("a").forEach(a => a.addEventListener("click", () => nav.classList.remove("open")));
 }
 const year = document.querySelector("#year");
