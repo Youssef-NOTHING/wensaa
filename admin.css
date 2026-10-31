@@ -2,3 +2,5 @@
 #product-upload{padding:10px;background:#faf9f6;border:1px dashed #b8c4bf;cursor:pointer}
 #image-preview-wrap{display:flex;align-items:center;gap:12px;margin:10px 0 18px}
 #image-preview{width:100px;height:100px;object-fit:cover;border-radius:12px;border:1px solid #e5e4df}
+
+.orders-panel{margin-top:20px}.orders-pw{display:flex;gap:10px;align-items:flex-end;margin-bottom:12px}.orders-pw input{margin:0!important}.orders-pw .button{margin:0!important;white-space:nowrap}.order-item select{margin-top:8px;padding:8px 10px;border:1px solid #e4e4df;border-radius:8px;font:12px "DM Sans";background:#faf9f6}

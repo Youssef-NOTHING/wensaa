@@ -23,11 +23,13 @@
           <div id="image-preview-wrap" hidden><img id="image-preview" alt="Product image preview"><button type="button" id="remove-image" class="text-button danger">Remove image</button></div>
           <label>Description<textarea id="product-description" rows="3" placeholder="Short product description"></textarea></label>
           <label class="check-label"><input id="product-active" type="checkbox" checked> Show this product on the website</label>
+          <label class="check-label"><input id="product-custom" type="checkbox"> Personalized product (customer writes what to print / write on it)</label>
           <div class="form-actions"><button class="button dark" type="submit" id="save-product">Save product</button><button class="button outline-dark" type="button" id="cancel-edit">Clear</button></div>
         </form>
       </section>
       <section class="panel"><div class="panel-heading"><div><p class="eyebrow">YOUR CATALOGUE</p><h2>Products</h2></div></div><div id="product-list" class="admin-list"></div></section>
     </div>
+    <section class="panel orders-panel"><div class="panel-heading"><div><p class="eyebrow">ORDERS</p><h2>Customer orders</h2></div><button id="refresh-orders" class="text-button">Refresh</button></div><div class="orders-pw"><input id="orders-password" type="password" placeholder="Server ADMIN_PASSWORD (from .env)"><button id="load-orders" class="button dark" type="button">Load orders</button></div><p id="orders-error" class="error"></p><div id="order-list" class="message-list"></div></section>
     <section class="panel messages-panel"><div class="panel-heading"><div><p class="eyebrow">INBOX</p><h2>Contact messages</h2></div><button id="clear-messages" class="text-button">Clear all</button></div><div id="message-list" class="message-list"></div></section>
     <section class="local-warning"><b>Local demo database</b><p>Products and messages are stored in this browser's localStorage. They are not shared across devices, and clearing browser data can erase them. This demo password is not secure authentication. Do not use this setup for real customer data or public admin access.</p><button id="export-data" class="button outline-dark">Export backup (JSON) ↓</button><button id="reset-data" class="text-button danger">Reset demo data</button></section>
   </section>

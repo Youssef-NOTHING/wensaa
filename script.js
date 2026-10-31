@@ -7,8 +7,8 @@ const DB = {
 };
 
 const starterProducts = [
-  { id: "p1", name: "WENSA Hope T-shirt", type: "WEAR THE MESSAGE", price: "120 MAD", image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85", description: "A simple way to share the WENSA message.", active: true },
-  { id: "p2", name: "Hope Tote Bag", type: "EVERYDAY SOLIDARITY", price: "75 MAD", image: "https://images.unsplash.com/photo-1590871016622-6c7b1e4a5f4b?auto=format&fit=crop&w=900&q=85", description: "Carry a message of kindness.", active: true },
+  { id: "p1", name: "WENSA Hope T-shirt", type: "WEAR THE MESSAGE", price: "120 MAD", image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85", description: "A simple way to share the WENSA message.", active: true, custom: true },
+  { id: "p2", name: "Hope Tote Bag", type: "EVERYDAY SOLIDARITY", price: "75 MAD", image: "https://images.unsplash.com/photo-1590871016622-6c7b1e4a5f4b?auto=format&fit=crop&w=900&q=85", description: "Carry a message of kindness.", active: true, custom: true },
   { id: "p3", name: "WENSA Care Kit", type: "A THOUGHTFUL GESTURE", price: "180 MAD", image: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=900&q=85", description: "A thoughtful gift set.", active: true }
 ];
 if (!localStorage.getItem("wensa_products")) DB.write("products", starterProducts);
@@ -64,3 +64,6 @@ if (contactForm) contactForm.addEventListener("submit", e => {
   if (status) status.textContent = "Message saved in this browser. Your email app will also open.";
   window.location.href = "mailto:hello@wensa.org?subject=" + subject + "&body=" + body;
 });
+
+const enquiry=localStorage.getItem("wensa_product_enquiry");
+if(enquiry){const field=document.querySelector('#contact-form textarea[name="message"]');if(field)field.value="I would like to know more about: "+enquiry;localStorage.removeItem("wensa_product_enquiry");}

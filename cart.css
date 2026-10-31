@@ -1,0 +1,44 @@
+.cart-btn{position:relative;margin-left:18px;border:1px solid #ffffff55;background:transparent;color:#fff;border-radius:30px;padding:9px 14px;font-size:16px;cursor:pointer}
+.cart-btn span{position:absolute;top:-7px;right:-6px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:#d56b3f;color:#fff;font:700 11px/20px "DM Sans";text-align:center}
+.cart-btn span[hidden]{display:none}
+.cart-overlay{position:fixed;inset:0;z-index:40;background:#102f3580}
+.cart-overlay[hidden],.cart-panel[hidden]{display:none}
+.cart-panel{position:fixed;z-index:41;top:0;right:0;bottom:0;width:min(440px,100vw);background:#faf7f0;display:flex;flex-direction:column;box-shadow:-10px 0 50px #102f3540;font-family:"DM Sans",sans-serif;color:#102f35}
+body.cart-open{overflow:hidden}
+.cp-head{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;background:#102f35;color:#fff}
+.cp-head b{font:24px "Playfair Display",Georgia,serif;font-weight:400}
+.cp-head button{border:0;background:none;color:#fff;font-size:28px;cursor:pointer}
+.cp-body{flex:1;overflow:auto;padding:18px 20px}
+.cp-foot{padding:16px 20px 20px;border-top:1px solid #e6e1d6;background:#fff}
+.cp-btn{width:100%;margin:0;text-align:center}
+.cp-two{display:flex;gap:10px}.cp-two .cp-btn{flex:1}
+.cp-btn[disabled]{opacity:.6;cursor:wait}
+.outline-dark{border:1px solid #102f35;color:#102f35;background:transparent}
+.cp-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:14px}
+.cp-total b{font:600 20px "Playfair Display",Georgia,serif}
+.cp-note{font-size:11px;color:#7b8586;line-height:1.6;margin:0 0 10px}
+.cp-error,.pc-error{color:#b34d35;font-size:12px;line-height:1.5;margin:6px 0;min-height:0}
+.cp-empty{text-align:center;color:#7b8586;padding:50px 0;font-size:13px}
+.cl{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid #ece8de}
+.cl>img{width:68px;height:68px;border-radius:10px;object-fit:cover;background:#eee;flex:none}
+.cl-main{flex:1;min-width:0}.cl-main b{font-size:13px}.cl-main small{display:block;font-size:11px;color:#7b8586;margin-top:2px}
+.cl-row{display:flex;align-items:center;gap:12px;margin-top:8px;font-size:12px}
+.text-link{margin-inline-start:auto;border:0;background:none;color:#b34d35;font:600 11px "DM Sans";cursor:pointer}
+.stepper{display:inline-flex;align-items:center;border:1px solid #d9d6cc;border-radius:30px;background:#fff;overflow:hidden}
+.stepper button{border:0;background:none;width:32px;height:32px;font-size:16px;cursor:pointer;color:#102f35}
+.stepper span,.stepper input{width:34px;text-align:center;font:600 13px "DM Sans";border:0;background:none;padding:0;-moz-appearance:textfield}
+.stepper input::-webkit-outer-spin-button,.stepper input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.pc-label{display:block;font-size:11px;font-weight:700;color:#526467;margin:10px 0 6px}
+.pc-label textarea{display:block;width:100%;margin-top:6px;padding:10px;border:1px solid #e4e4df;border-radius:10px;background:#faf9f6;font:12px "DM Sans";resize:vertical}
+.pc-row{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}.pc-row .button{margin:0;padding:12px 18px}
+.cp-body label:not(.pc-label){display:block;font-size:11px;font-weight:700;color:#526467;margin-bottom:16px}
+.cp-body .f-input{display:block;width:100%;margin-top:7px;padding:13px;border:1px solid #e4e4df;border-radius:10px;background:#fff;font:13px "DM Sans";outline:none}
+.cp-body .f-input:focus,.pc-label textarea:focus{border-color:#1d6264}
+.sum-box{background:#fff;border:1px solid #ece8de;border-radius:14px;padding:14px 16px;margin-bottom:14px;font-size:13px}
+.sum-box>small{font-size:9px;letter-spacing:.18em;color:#c76743;font-weight:700}.sum-box p{margin:8px 0 0;line-height:1.7}
+.sum-line{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #ece8de}.sum-line:last-child{border:0}
+.sum-line span{white-space:nowrap;font-size:12px}.sum-custom{font-size:11px!important;color:#667477;margin:4px 0 0!important;white-space:pre-wrap;overflow-wrap:anywhere}
+.cp-done{text-align:center;padding:40px 10px}.cp-done span{font-size:54px;color:#d56b3f}.cp-done p{font-size:14px;color:#526467}.cp-ref{font-size:13px!important}
+html[dir=rtl] .cart-panel{right:auto;left:0}html[dir=rtl] .cart-btn{margin-left:0;margin-right:18px}
+html[dir=rtl] .cart-btn span{right:auto;left:-6px}
+@media(max-width:760px){.cart-btn{order:2;margin-left:auto;margin-right:10px}.toggle{order:3}html[dir=rtl] .cart-btn{margin-right:auto;margin-left:10px}}
