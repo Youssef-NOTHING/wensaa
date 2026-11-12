@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102f35"><title>WENSA Admin</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="admin.css"><script src="admin.js" defer></script></head>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102f35"><title>WENSA Admin</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="admin.css"><script src="products-seed.js"></script><script src="admin.js" defer></script></head>
 <body class="admin-body">
 <header class="admin-header"><a class="brand" href="index.html"><img src="assets/wensa-logo.jpeg" alt="">WENSA <span class="admin-label">ADMIN</span></a><a class="back-link" href="index.html">← View website</a></header>
 <main class="admin-main">
@@ -21,7 +21,7 @@
           <label>Product image URL (optional)<input id="product-image" placeholder="https://..."></label>
           <label>Or upload product image<input id="product-upload" type="file" accept="image/*"></label>
           <div id="image-preview-wrap" hidden><img id="image-preview" alt="Product image preview"><button type="button" id="remove-image" class="text-button danger">Remove image</button></div>
-          <label>Description<textarea id="product-description" rows="3" placeholder="Short product description"></textarea></label>
+          <label>Small description (shown under the product name)<textarea id="product-description" rows="3" maxlength="140" placeholder="e.g. Un design marocain authentique, élégant et fait main."></textarea></label>
           <label class="check-label"><input id="product-active" type="checkbox" checked> Show this product on the website</label>
           <label class="check-label"><input id="product-custom" type="checkbox"> Personalized product (customer writes what to print / write on it)</label>
           <div class="form-actions"><button class="button dark" type="submit" id="save-product">Save product</button><button class="button outline-dark" type="button" id="cancel-edit">Clear</button></div>

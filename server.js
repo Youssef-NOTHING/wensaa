@@ -5,6 +5,7 @@ import rateLimit from "express-rate-limit";
 import path from "node:path";
 import fs from "node:fs/promises";
 import crypto from "node:crypto";
+import nodemailer from "nodemailer";
 import { fileURLToPath } from "node:url";
 
 dotenv.config();
@@ -65,6 +66,29 @@ function adminOnly(req, res, next) {
   next();
 }
 
+
+/* ---------- ORDER E-MAIL (Gmail) ---------- */
+const mailer = process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD
+  ? nodemailer.createTransport({ service: "gmail", auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_APP_PASSWORD } })
+  : null;
+if (!mailer) console.warn("Gmail is not configured: orders are saved but no e-mail is sent. Set GMAIL_USER and GMAIL_APP_PASSWORD in .env.");
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const dh = n => Number(n).toLocaleString("fr-FR") + " DH";
+async function sendOrderEmail(order) {
+  if (!mailer) return;
+  const { customer: c, items } = order;
+  const lines = items.map(i => `${i.qty} × ${i.name}${i.unit == null ? " (prix non défini)" : " — " + dh(i.unit * i.qty)}${i.custom ? "\n   ✎ " + i.custom : ""}`).join("\n");
+  const text = `Nouvelle commande ${order.ref}\n\nClient : ${c.name}\nTéléphone : ${c.phone}\nVille : ${c.city}\nAdresse : ${c.address}\n\nArticles :\n${lines}\n\nTotal : ${dh(order.total)}${order.hasUnpricedItems ? " (+ articles sans prix)" : ""}\nLangue du client : ${order.lang || "—"}`;
+  const rows = items.map(i => `<tr><td style="padding:8px 10px;border-bottom:1px solid #eadfc8">${i.qty} × <b>${esc(i.name)}</b>${i.custom ? `<br><i>✎ ${esc(i.custom)}</i>` : ""}</td><td style="padding:8px 10px;border-bottom:1px solid #eadfc8;text-align:right;white-space:nowrap">${i.unit == null ? "—" : dh(i.unit * i.qty)}</td></tr>`).join("");
+  const html = `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;color:#3a1a1f"><div style="background:#6b0f1f;color:#f7ecd2;padding:18px 22px;border-radius:12px 12px 0 0"><div style="font-size:12px;letter-spacing:2px">WENSA</div><div style="font-size:22px">Nouvelle commande</div><div style="font-size:13px;opacity:.85">${esc(order.ref)}</div></div><div style="background:#fbf5e6;padding:20px 22px;border-radius:0 0 12px 12px"><p style="margin:0 0 14px"><b>${esc(c.name)}</b><br>📞 <a href="tel:${esc(c.phone)}">${esc(c.phone)}</a><br>${esc(c.city)} — ${esc(c.address)}</p><table style="width:100%;border-collapse:collapse;font-size:14px">${rows}<tr><td style="padding:12px 10px;font-size:16px"><b>Total</b></td><td style="padding:12px 10px;text-align:right;font-size:16px"><b>${dh(order.total)}</b></td></tr></table>${order.hasUnpricedItems ? '<p style="font-size:12px;color:#8a1b2c">Certains articles n’ont pas de prix : confirmez le total avec le client.</p>' : ""}<p style="font-size:12px;color:#7a6a58;margin-bottom:0">À faire : appeler le client pour confirmer la commande et la livraison.</p></div></div>`;
+  await mailer.sendMail({
+    from: `"WENSA Boutique" <${process.env.GMAIL_USER}>`,
+    to: process.env.ORDER_NOTIFY_EMAIL || process.env.GMAIL_USER,
+    subject: `Nouvelle commande ${order.ref} — ${dh(order.total)}`,
+    text, html
+  });
+}
+
 app.post("/api/orders", async (req, res) => {
   const b = req.body || {}, c = b.customer || {};
   const customer = { name: str(c.name, 100), phone: str(c.phone, 30), city: str(c.city, 80), address: str(c.address, 300) };
@@ -85,6 +109,7 @@ app.post("/api/orders", async (req, res) => {
   const order = { ref, createdAt: new Date().toISOString(), status: "new", lang: str(b.lang, 5), customer, items, total, hasUnpricedItems: items.some(i => i.unit == null) };
   try {
     await withLock(async () => { const list = await readOrders(); list.unshift(order); await writeOrders(list); });
+    try { await sendOrderEmail(order); } catch (mailError) { console.error("Order e-mail error:", mailError?.message || mailError); }
     res.status(201).json({ ref });
   } catch (error) {
     console.error("Order save error:", error?.message || error);

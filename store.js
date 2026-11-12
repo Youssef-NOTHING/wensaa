@@ -1,9 +1,5 @@
 /* WENSA Store — products + cart + order checkout */
-const fallbackProducts=[
-{id:"p1",name:"WENSA Hope T-shirt",type:"WEAR THE MESSAGE",price:"120 MAD",image:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85",description:"A simple way to share the WENSA message.",active:true,custom:true},
-{id:"p2",name:"Hope Tote Bag",type:"EVERYDAY SOLIDARITY",price:"75 MAD",image:"https://images.unsplash.com/photo-1590871016622-6c7b1e4a5f4b?auto=format&fit=crop&w=900&q=85",description:"Carry a message of kindness.",active:true,custom:true},
-{id:"p3",name:"WENSA Care Kit",type:"A THOUGHTFUL GESTURE",price:"180 MAD",image:"https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=900&q=85",description:"A thoughtful gift set.",active:true,custom:false}];
-if(!localStorage.getItem("wensa_products"))localStorage.setItem("wensa_products",JSON.stringify(fallbackProducts));
+const fallbackProducts=window.WENSA_SEED||[];
 
 const safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const L=()=>localStorage.getItem("wensa_lang")||"fr";
@@ -11,10 +7,11 @@ const T={
 en:{ask:"Ask about this product ↗",empty:"New WENSA products will be added soon.",add:"Add to cart",added:"Added ✓",custom:"Personalization",customPh:"What should we print or write? Name, phrase, colour, other details…",needCustom:"Please describe the personalization for each personalized product.",cart:"Your cart",emptyCart:"Your cart is empty.",remove:"Remove",qty:"Quantity",cont:"Continue",back:"Back",details:"Your details",fullName:"Full name",phone:"Phone",city:"City",address:"Address",review:"Review order",summary:"Order summary",total:"Total",confirm:"Confirm and send order",sending:"Sending…",doneTitle:"Order received!",doneText:"Thank you. The WENSA team will call you to confirm your order and delivery.",ref:"Order reference",close:"Close",badPhone:"Please enter a valid phone number.",fillAll:"Please fill in all fields.",err:"We could not send your order. Please try again or contact us.",priceReq:"Price on request",unpriced:"Some items have no listed price: the team will confirm the final total.",custLabel:"Customer",items:"Items"},
 fr:{ask:"Se renseigner sur ce produit ↗",empty:"De nouveaux produits WENSA seront bientôt disponibles.",add:"Ajouter au panier",added:"Ajouté ✓",custom:"Personnalisation",customPh:"Que faut-il imprimer ou écrire ? Nom, phrase, couleur, autres détails…",needCustom:"Merci de préciser la personnalisation de chaque produit personnalisé.",cart:"Votre panier",emptyCart:"Votre panier est vide.",remove:"Retirer",qty:"Quantité",cont:"Continuer",back:"Retour",details:"Vos informations",fullName:"Nom complet",phone:"Téléphone",city:"Ville",address:"Adresse",review:"Vérifier la commande",summary:"Récapitulatif",total:"Total",confirm:"Confirmer et envoyer la commande",sending:"Envoi…",doneTitle:"Commande reçue !",doneText:"Merci. L'équipe WENSA vous appellera pour confirmer la commande et la livraison.",ref:"Référence de commande",close:"Fermer",badPhone:"Merci d'entrer un numéro de téléphone valide.",fillAll:"Merci de remplir tous les champs.",err:"Impossible d'envoyer la commande. Réessayez ou contactez-nous.",priceReq:"Prix sur demande",unpriced:"Certains articles n'ont pas de prix affiché : l'équipe confirmera le total final.",custLabel:"Client",items:"Articles"},
 ar:{ask:"استفسر عن المنتج ↗",empty:"ستتم إضافة منتجات WENSA جديدة قريباً.",add:"أضف إلى السلة",added:"تمت الإضافة ✓",custom:"التخصيص",customPh:"شنو بغيتي نطبعو أو نكتبو؟ الاسم، العبارة، اللون، أو أي تفاصيل أخرى…",needCustom:"المرجو كتابة تفاصيل التخصيص لكل منتج شخصي.",cart:"سلة المشتريات",emptyCart:"السلة فارغة.",remove:"حذف",qty:"الكمية",cont:"متابعة",back:"رجوع",details:"معلوماتك",fullName:"الاسم الكامل",phone:"الهاتف",city:"المدينة",address:"العنوان",review:"مراجعة الطلب",summary:"ملخص الطلب",total:"المجموع",confirm:"تأكيد وإرسال الطلب",sending:"جارٍ الإرسال…",doneTitle:"تم استلام طلبك!",doneText:"شكراً. سيتصل بك فريق WENSA لتأكيد الطلب والتوصيل.",ref:"رقم الطلب",close:"إغلاق",badPhone:"المرجو إدخال رقم هاتف صحيح.",fillAll:"المرجو ملء جميع الخانات.",err:"تعذر إرسال الطلب. أعد المحاولة أو تواصل معنا.",priceReq:"الثمن عند الطلب",unpriced:"بعض المنتجات بدون ثمن معروض: الفريق غادي يأكد المجموع النهائي.",custLabel:"الزبون",items:"المنتجات"}};
+T.fr.cartLbl="Panier";T.en.cartLbl="Cart";T.ar.cartLbl="السلة";
 const t=k=>(T[L()]||T.fr)[k]||T.en[k]||k;
 
 const parsePrice=s=>{const m=String(s??"").match(/\d+(?:[.,]\d+)?/);return m?parseFloat(m[0].replace(",",".")):null};
-const money=n=>n.toLocaleString("en-US",{maximumFractionDigits:2})+" MAD";
+const money=n=>n.toLocaleString("en-US",{maximumFractionDigits:2})+" DH";
 const getProducts=()=>{let p=[];try{p=JSON.parse(localStorage.getItem("wensa_products"))||fallbackProducts}catch{p=fallbackProducts}return p.filter(x=>x.active!==false)};
 
 /* ---------- cart state ---------- */
@@ -29,15 +26,37 @@ const countItems=()=>cart.reduce((s,l)=>s+l.qty,0);
 function updateBadge(){const b=document.getElementById("cart-count");if(b){b.textContent=countItems();b.hidden=!countItems()}}
 
 /* ---------- products ---------- */
+/* ---------- product card helpers ---------- */
+const pick=(o,fb)=>(o&&(o[L()]||o.fr))||fb;
+const ICON={
+ hand:'<path d="M8 12V6a1.5 1.5 0 0 1 3 0v5V4.5a1.5 1.5 0 0 1 3 0V11V6a1.5 1.5 0 0 1 3 0v8.5c0 3.6-2.6 6.5-6 6.5-2.4 0-4-1.2-5.2-3.2L4.5 13a1.5 1.5 0 0 1 2.6-1.4z"/>',
+ gem:'<path d="M6 3h12l4 6-10 12L2 9z"/>',
+ star:'<path d="M12 1l2.5 4.5L19 4l-1.5 5L23 12l-5.5 3 1.5 5-4.5-1.5L12 23l-2.5-4.5L5 20l1.5-5L1 12l5.5-3L5 4l4.5 1.5z"/>',
+ case:'<path d="M3 8h18v12H3z"/><path d="M9 8V5h6v3" fill="none" stroke="currentColor" stroke-width="2"/>',
+ feather:'<path d="M20 4c-8 0-13 5-13 12l-3 4 4-2c7 0 12-5 12-14z"/>',
+ wallet:'<path d="M3 6h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="17" cy="13" r="1.5" fill="#f7ecd2"/>',
+ shield:'<path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z"/><path d="M8.500 12l2.5 2.5 4.5-5" fill="none" stroke="#f7ecd2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
+};
+const icon=n=>`<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">${ICON[n]||ICON.star}</svg>`;
+const priceHTML=p=>{const n=parsePrice(p.price);return n==null?`<span class="p-ask">${safe(p.price||t("priceReq"))}</span>`:`<span class="p-num">${n}</span><small>DH</small>`};
+
+/* ---------- products ---------- */
 window.renderStoreProducts=function(){
  const target=document.getElementById("store-products");
  if(target){
   const products=getProducts();
-  target.innerHTML=products.length?products.map(p=>`<article class="product" data-id="${safe(p.id)}"><img src="${safe(p.image)}" alt="${safe(p.name)}" onerror="this.src='assets/wensa-logo.jpeg'"><div><small>${safe(p.type||"WENSA")}</small><h3>${safe(p.name)} <b>${safe(p.price||t("priceReq"))}</b></h3><p class="product-description">${safe(p.description||"")}</p>
-  ${p.custom?`<label class="pc-label">${t("custom")}<textarea class="pc-text" rows="2" maxlength="300" placeholder="${safe(t("customPh"))}"></textarea></label>`:""}
-  <div class="pc-row"><div class="stepper" aria-label="${t("qty")}"><button type="button" data-step="-1">−</button><input class="pc-qty" type="number" inputmode="numeric" min="1" max="99" value="1"><button type="button" data-step="1">+</button></div><button type="button" class="button orange pc-add">${t("add")}</button></div>
-  <p class="pc-error" role="alert"></p>
-  <a href="index.html#contact" class="product-ask" data-name="${safe(p.name)}">${t("ask")}</a></div></article>`).join(""):`<p class="empty-store">${t("empty")}</p>`;
+  target.innerHTML=products.length?products.map(p=>{
+   const name=pick(p.names,p.name),desc=pick(p.descs,p.description||"");
+   const feats=(p.feats||[]).map(f=>`<li>${icon(f.i)}<span>${safe(pick(f.l,""))}</span></li>`).join("");
+   return `<article class="product" data-id="${safe(p.id)}"><div class="p-media"><div class="p-frame"><img src="${safe(p.image)}" alt="${safe(name)}" onerror="this.src='assets/wensa-logo.jpeg'"></div></div>
+   <div class="p-body"><h3 class="p-name">${safe(name)}</h3><p class="product-description">${safe(desc)}</p>
+   ${feats?`<ul class="p-feats">${feats}</ul>`:""}
+   <a href="index.html#contact" class="product-ask" data-name="${safe(p.name)}">${t("ask")}</a></div>
+   <div class="p-side"><div class="p-price">${priceHTML(p)}</div>
+   ${p.custom?`<label class="pc-label">${t("custom")}<textarea class="pc-text" rows="2" maxlength="300" placeholder="${safe(t("customPh"))}"></textarea></label>`:""}
+   <div class="pc-row"><div class="stepper" aria-label="${t("qty")}"><button type="button" data-step="-1">−</button><input class="pc-qty" type="number" inputmode="numeric" min="1" max="99" value="1"><button type="button" data-step="1">+</button></div></div>
+   <button type="button" class="button orange pc-add">${t("add")}</button>
+   <p class="pc-error" role="alert"></p></div></article>`}).join(""):`<p class="empty-store">${t("empty")}</p>`;
   target.querySelectorAll(".product-ask").forEach(a=>a.addEventListener("click",()=>localStorage.setItem("wensa_product_enquiry",a.dataset.name)));
  }
  renderCart();
@@ -68,7 +87,7 @@ function buildShell(){
  const header=document.querySelector("header");
  if(header&&!document.getElementById("cart-btn")){
   const b=document.createElement("button");b.id="cart-btn";b.className="cart-btn";b.type="button";b.setAttribute("aria-label","Cart");
-  b.innerHTML='🛍 <span id="cart-count" hidden>0</span>';header.appendChild(b);
+  b.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 11V7a4 4 0 0 0-8 0v4M5 9h14l1 12H4z"/></svg><b id="cart-lbl"></b><span id="cart-count" hidden>0</span>';header.appendChild(b);
   b.addEventListener("click",()=>openDrawer());
  }
  if(!document.getElementById("cart-panel")){
@@ -89,7 +108,7 @@ function totalsHTML(){return `<div class="cp-total"><span>${t("total")}</span><b
 
 function renderCart(){
  const box=document.getElementById("cart-panel");if(!box)return;
- updateBadge();
+ updateBadge();const lbl=document.getElementById("cart-lbl");if(lbl)lbl.textContent=t("cartLbl");
  const titles={cart:t("cart"),details:t("details"),summary:t("summary"),done:t("doneTitle")};
  let body="",foot="";
  if(view!=="done"&&!cart.length)view="cart";

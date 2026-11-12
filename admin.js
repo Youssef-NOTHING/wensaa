@@ -1,8 +1,5 @@
 const KEY_PRODUCTS="wensa_products",KEY_MESSAGES="wensa_messages";
-const seed=[
-{id:"p1",name:"WENSA Hope T-shirt",type:"WEAR THE MESSAGE",price:"120 MAD",image:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85",description:"A simple way to share the WENSA message.",active:true,custom:true},
-{id:"p2",name:"Hope Tote Bag",type:"EVERYDAY SOLIDARITY",price:"75 MAD",image:"https://images.unsplash.com/photo-1590871016622-6c7b1e4a5f4b?auto=format&fit=crop&w=900&q=85",description:"Carry a message of kindness.",active:true,custom:true},
-{id:"p3",name:"WENSA Care Kit",type:"A THOUGHTFUL GESTURE",price:"180 MAD",image:"https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=900&q=85",description:"A thoughtful gift set.",active:true}];
+const seed=window.WENSA_SEED||[];
 const read=(k,f)=>{try{return JSON.parse(localStorage.getItem(k))??f}catch{return f}};
 const write=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 if(!localStorage.getItem(KEY_PRODUCTS))write(KEY_PRODUCTS,seed);
@@ -65,7 +62,7 @@ async function loadOrders(){
   box.innerHTML=list.length?list.map(o=>`<article class="message-item order-item"><time>${escapeHTML(new Date(o.createdAt).toLocaleString())}</time><strong>${escapeHTML(o.ref)}</strong>
    <p><b>${escapeHTML(o.customer.name)}</b> · <a href="tel:${escapeHTML(o.customer.phone)}">${escapeHTML(o.customer.phone)}</a><br>${escapeHTML(o.customer.city)} — ${escapeHTML(o.customer.address)}</p>
    <p>${o.items.map(i=>`${i.qty} × ${escapeHTML(i.name)}${i.custom?`<br><i>✎ ${escapeHTML(i.custom)}</i>`:""}`).join("<br>")}</p>
-   <p><b>Total: ${Number(o.total).toLocaleString("en-US")} MAD</b>${o.hasUnpricedItems?" (+ items without price)":""}</p>
+   <p><b>Total: ${Number(o.total).toLocaleString("en-US")} DH</b>${o.hasUnpricedItems?" (+ items without price)":""}</p>
    <select data-order="${escapeHTML(o.ref)}">${ORDER_STATUS.map(s=>`<option value="${s}"${s===o.status?" selected":""}>${s}</option>`).join("")}</select></article>`).join(""):'<p class="empty">No orders yet.</p>';
  }catch{err.textContent="Server not reachable. Run npm start and open http://localhost:3000/admin.html.";}
 }
